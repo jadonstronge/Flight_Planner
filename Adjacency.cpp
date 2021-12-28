@@ -9,6 +9,9 @@ using namespace std;
 
 void Adjacency::readIn(char * arg) {
     std::ifstream infs(arg);
+    if (infs.fail()) {
+        cout << "Problem opening file!" << endl;
+    }
     char buffer[100];
     infs.getline(buffer, 100, '\n'); // buffer stores the amt of rows in file
     infs.getline(buffer, 100, ' '); // write over buffer, store first originating city
@@ -22,16 +25,17 @@ void Adjacency::readIn(char * arg) {
         minutes = buffer;
         infs.getline(buffer, 100, '\n');
         airline = buffer;
-        //wrap destination attributes in Wrapper object and insert
-        // to adjacency list
+
+        //wrap destination attributes in Wrapper object and insert to adj list
         populate_list(origin, destination, cost, minutes, airline);
-        //swap origin and destination to account for bi-directional flights
+        //swap origin and destination to account for bidirectional flights
         std::swap(origin, destination);
         populate_list(origin, destination, cost, minutes, airline);
         infs.getline(buffer, 100, ' ');
     }
     infs.close();
-    /*print_list();*/
+    /**comment out to view adjacency list**/
+//    print_list();
 }
 
 void Adjacency::populate_list(const DSString& orig, const DSString& dest, const DSString& cos,
@@ -74,7 +78,7 @@ void Adjacency::requests(char* arg, char* arg2) {
     infs.close();
 }
 
-//receives origin city, dest city, time or cost sort/'bool', and output path
+//receives origin city, dest city, and the time OR cost sort/'bool'
 void Adjacency::backtrack(const DSString& orig, const DSString& dest, const DSString& boo) {
 
     temp.push(orig); //push source city to stack
@@ -91,7 +95,7 @@ void Adjacency::backtrack(const DSString& orig, const DSString& dest, const DSSt
             if (itr.get_destination() == dest) {
                 temp.push(itr);
                 itinerary.push(temp);
-                temp.pop(); temp.pop();
+                temp.pop();
             }
             else {
                 // if dest city can be reached by one of source city's connection cities
@@ -109,7 +113,14 @@ void Adjacency::backtrack(const DSString& orig, const DSString& dest, const DSSt
         }
     } //end of connections iteration
 
+    temp.pop(); //clear temp for next request
+
 } //end of function
+
+/** function call may prove to be redundant as wrappers of the same city have different attributes
+ * e.g. the first request checks two different austin flights from dallas to houston
+ *      so it wouldn't matter that austin is already on the stack. additionally, we pop the first austin
+ *      off anyway, so it'll never be on the stack when we check */
 
 // checks if connection is already on stack
 bool Adjacency::on_stack(Wrapper& itr, DSStack<Wrapper> temp) {

@@ -29,8 +29,8 @@ int main(int argc, char** argv) {
     }
     else {
         Adjacency a;
-        a.readIn(argv[1]);
-        a.requests(argv[2], argv[3]);
+        a.readIn(argv[1]); //flight data
+        a.requests(argv[2], argv[3]); //flight requests and output file
     }
 
 

@@ -15,9 +15,7 @@ namespace smulib { // wrap all your classes into a library EX: DSString, and lis
     // when implementing a class template, you CANNOT separate .h and .cpp
     class list {
     private:
-        /*
-         * list node represents the fundamental node structure of the linked list
-         */
+//        list node represents the fundamental node structure of the linked list
         struct list_node { // like classes but w default visibility public (whereas class is default private)
             T data;
             list_node *next, *prev;
@@ -34,6 +32,8 @@ namespace smulib { // wrap all your classes into a library EX: DSString, and lis
     public:
         list() = default;
 
+        /** no need to explicitly set count nodes in copy constructor
+         * or overloaded assignment operator because push_back increments count_nodes */
         //copy constructor
         list(const list<T>& rhs) {
             list_node* cur = rhs.front;

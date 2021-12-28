@@ -19,13 +19,12 @@ Wrapper::Wrapper(const DSString& dest, const DSString& c, const DSString& mins, 
     airline = air;
 }
 
-//one param constructor designed for backtrack function to provide
-// variable to name consistency when checking if cities on stack == final dest
+//one param constructor designed for backtrack function
 Wrapper::Wrapper(const DSString & orig) {
     destination = orig;
 }
 
-DSString & Wrapper::get_destination() {
+DSString &Wrapper::get_destination() {
     return destination;
 }
 
@@ -43,17 +42,4 @@ DSString &Wrapper::get_airline() {
 
 bool Wrapper::operator==(const Wrapper &rhs) const {
     return ((destination == rhs.destination));
-}
-
-bool Wrapper::has_visited(const Wrapper & arg) {
-    for (const auto& itr: visitedCities) {
-        if (itr == arg) {
-            return true;
-        }
-    }
-    return false;
-}
-
-void Wrapper::visit(const Wrapper &arg) {
-    this->visitedCities.push_back(arg);
 }
