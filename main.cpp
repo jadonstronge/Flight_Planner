@@ -14,11 +14,11 @@
  */
 #include "catch_setup.h"
 #include "Adjacency.h"
-#include "list.h"
+/*#include "list.h"
 
 #include "DSString.h"
 #include <fstream>
-#include <iostream>
+#include <iostream>*/
 using namespace std;
 
 using namespace smulib;

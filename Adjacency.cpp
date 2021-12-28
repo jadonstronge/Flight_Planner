@@ -31,7 +31,7 @@ void Adjacency::readIn(char * arg) {
         infs.getline(buffer, 100, ' ');
     }
     infs.close();
-    print_list();
+    /*print_list();*/
 }
 
 void Adjacency::populate_list(const DSString& orig, const DSString& dest, const DSString& cos,
@@ -52,6 +52,7 @@ void Adjacency::populate_list(const DSString& orig, const DSString& dest, const 
     }
 }
 
+//arg = input file arg2 = output file
 void Adjacency::requests(char* arg, char* arg2) {
     ifstream infs(arg);
     if (infs.fail()) {
@@ -66,41 +67,47 @@ void Adjacency::requests(char* arg, char* arg2) {
         destination = buffer;
         infs.getline(buffer, 100, '\n');
         boolean = buffer;
-        backtrack(origin, destination, boolean, arg2);
+        backtrack(origin, destination, boolean);
+        print_stack(arg2);
         infs.getline(buffer, 100, ' ');
     }
     infs.close();
 }
 
 //receives origin city, dest city, time or cost sort/'bool', and output path
-void Adjacency::backtrack(const DSString& orig, const DSString& dest, const DSString& boo, char* arg2) {
-
+void Adjacency::backtrack(const DSString& orig, const DSString& dest, const DSString& boo) {
 
     temp.push(orig); //push source city to stack
     //returns and holds l.list of source city's connections
     auto& hold = adj_list[temp.top().get_destination()];
-    auto itr = hold.begin();
 
-    while(!temp.is_empty()) {
-
-        //if destination city is found, store flight path option
-        if (temp.top().get_destination() == dest) {
-            itinerary.push(temp);
-            print_stack(arg2);
-            temp.pop();
-        } else { //iterate over temp.top's connection cities
-            if (itr == hold.end()) { // if connection is null, reset itr
-                temp.pop();
-            } else {
-                if (on_stack(*itr, temp)) {
-                    ++itr;
-                } else {
-                    temp.push(*itr);
-                    ++itr;
+    //if destination city is found, store flight path option
+    if (temp.top().get_destination() == dest) {
+        itinerary.push(temp);
+        temp.pop();
+    }
+    else { //iterate over temp.top's connection cities
+        for (auto itr: hold) {
+            if (itr.get_destination() == dest) {
+                temp.push(itr);
+                itinerary.push(temp);
+                temp.pop(); temp.pop();
+            }
+            else {
+                // if dest city can be reached by one of source city's connection cities
+                if (adj_list[itr.get_destination()].find(dest) != -1) {
+                    if (on_stack(itr, temp)) {
+                        continue;
+                    } else {
+                        temp.push(itr);
+                        temp.push(dest);
+                        itinerary.push(temp);
+                        temp.pop(); temp.pop();
+                    }
                 }
             }
-        } //end of connections iteration
-    }
+        }
+    } //end of connections iteration
 
 } //end of function
 
@@ -128,17 +135,20 @@ void Adjacency::print_list(){
 }
 
 void Adjacency::print_stack(char* arg) {
-    auto hold1 = temp;
-    DSStack<Wrapper> hold2; //flip the stack to print elements in order
-    while (!hold1.is_empty()) {
-        hold2.push(hold1.top());
-        hold1.pop();
+    while (!itinerary.is_empty()) {
+        auto hold1 = itinerary.top();
+        DSStack<Wrapper> hold2; //flip the stack to print elements in order
+        while (!hold1.is_empty()) {
+            hold2.push(hold1.top());
+            hold1.pop();
+        }
+        cout << "Itinerary:" << "\n" << "\t";
+        cout << hold2.top().get_destination(); hold2.pop();
+        while(!hold2.is_empty()) {
+            cout << " -> " << hold2.top().get_destination();
+            hold2.pop();
+        }
+        cout << endl;
+        itinerary.pop();
     }
-    cout << "Itinerary:" << "\n" << "\t";
-    cout << hold2.top().get_destination(); hold2.pop();
-    while(!hold2.is_empty()) {
-        cout << " -> " << hold2.top().get_destination();
-        hold2.pop();
-    }
-    cout << endl;
 }

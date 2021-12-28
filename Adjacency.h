@@ -26,8 +26,8 @@ public:
     void populate_list(const DSString&, const DSString&, const DSString&,
                        const DSString&, const DSString&);
     void requests(char*, char*);
-    void backtrack(const DSString&, const DSString&, const DSString&, char*);
-    bool on_stack(Wrapper&, DSStack<Wrapper>);
+    void backtrack(const DSString&, const DSString&, const DSString&);
+    static bool on_stack(Wrapper&, DSStack<Wrapper>);
     void print_stack(char*);
     void print_list();
 };
