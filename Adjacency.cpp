@@ -20,9 +20,9 @@ void Adjacency::readIn(char * arg) {
         infs.getline(buffer, 100, ' ');
         destination = buffer;
         infs.getline(buffer, 100, ' ');
-        cost = buffer;
+        cost = stoi(buffer);
         infs.getline(buffer, 100, ' ');
-        minutes = buffer;
+        minutes = stoi(buffer);
         infs.getline(buffer, 100, '\n');
         airline = buffer;
 
@@ -38,8 +38,8 @@ void Adjacency::readIn(char * arg) {
 //    print_list();
 }
 
-void Adjacency::populate_list(const DSString& orig, const DSString& dest, const DSString& cos,
-                              const DSString& mins, const DSString& air) {
+void Adjacency::populate_list(const DSString& orig, const DSString& dest, const int& cos,
+                              const int& mins, const DSString& air) {
 
     Wrapper a(dest, cos, mins, air);
     auto itr = adj_list.find(orig);
@@ -146,20 +146,33 @@ void Adjacency::print_list(){
 }
 
 void Adjacency::print_stack(char* arg) {
+
     while (!itinerary.is_empty()) {
+        int total_time = 0; int total_cost = 0; int layovers = 0;
         auto hold1 = itinerary.top();
+
         DSStack<Wrapper> hold2; //flip the stack to print elements in order
         while (!hold1.is_empty()) {
             hold2.push(hold1.top());
             hold1.pop();
+            layovers++;
         }
-        cout << "Itinerary:" << "\n" << "\t";
+        layovers -= 2; //decrement layovers by 2 to account for orig and destination city
+
+        cout << "Itinerary:" << "\n\t";
         cout << hold2.top().get_destination(); hold2.pop();
         while(!hold2.is_empty()) {
             cout << " -> " << hold2.top().get_destination();
+            /*cout << " (" << hold2.top().get_airline() << ") ";*/
+            total_time += hold2.top().get_minutes();
+            total_cost += hold2.top().get_cost();
             hold2.pop();
         }
-        cout << endl;
+        total_time += layovers * 43; //layover incurs 43 min penalty
+        total_cost += layovers * 23; //passenger spends avg $23 during layover
+        cout << "\n\t";
+        cout << "Total Time: " << total_time << " and Total Cost: " << total_cost;
+        cout << "\n\n";
         itinerary.pop();
     }
 }

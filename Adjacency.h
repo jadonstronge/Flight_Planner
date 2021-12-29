@@ -18,13 +18,13 @@ private:
     DSStack<Wrapper> temp; //holds the cities that are pushed and popped as you backtrack
     DSStack<DSStack<Wrapper>> itinerary; //holds the final possible flight paths
 
-    DSString origin, destination, boolean;
-    DSString cost, minutes, airline;
+    DSString origin, destination, boolean, airline;
+    int cost, minutes;
 
 public:
     void readIn(char*);
-    void populate_list(const DSString&, const DSString&, const DSString&,
-                       const DSString&, const DSString&);
+    void populate_list(const DSString&, const DSString&, const int&,
+                       const int&, const DSString&);
     void requests(char*, char*);
     void backtrack(const DSString&, const DSString&, const DSString&);
     static bool on_stack(Wrapper&, DSStack<Wrapper>);

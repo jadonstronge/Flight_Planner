@@ -14,16 +14,17 @@ using namespace smulib;
 
 class Wrapper {
 private:
-    DSString destination, cost, minutes, airline;
+    DSString destination, airline;
+    int cost, minutes;
 
 public:
     Wrapper();
-    Wrapper(const DSString&, const DSString&, const DSString&, const DSString&);
+    Wrapper(const DSString&, const int&, const int&, const DSString&);
     Wrapper(const DSString&); //to make an object for source city to push onto stack
 
     DSString& get_destination();
-    DSString& get_cost();
-    DSString& get_minutes();
+    int& get_cost();
+    int& get_minutes();
     DSString& get_airline();
 
     bool operator==(const Wrapper&) const;

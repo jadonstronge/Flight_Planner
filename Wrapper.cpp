@@ -8,11 +8,11 @@
 
 Wrapper::Wrapper() {
     destination = "";
-    cost = "";
-    minutes = "";
+    cost = 0;
+    minutes = 0;
     airline = "";
 }
-Wrapper::Wrapper(const DSString& dest, const DSString& c, const DSString& mins, const DSString& air) {
+Wrapper::Wrapper(const DSString& dest, const int& c, const int& mins, const DSString& air) {
     destination = dest;
     cost = c;
     minutes = mins;
@@ -28,11 +28,11 @@ DSString &Wrapper::get_destination() {
     return destination;
 }
 
-DSString &Wrapper::get_cost() {
+int& Wrapper::get_cost() {
     return cost;
 }
 
-DSString &Wrapper::get_minutes() {
+int& Wrapper::get_minutes() {
     return minutes;
 }
 
